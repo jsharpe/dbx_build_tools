@@ -81,6 +81,7 @@ def _add_vpip_compiler_args(ctx, cc_toolchain, copts, conly, args):
     )
     args.add(c_compiler, format = "--compiler-executable=%s")
     args.add(archiver, format = "--archiver=%s")
+    args.add("--extra-path=" + '/'.join(c_compiler.split('/')[:-1]))
 
     # Add base compiler flags from the crosstool. These contain the correct
     # include paths and other side-wide settings like -fstack-protector. These
