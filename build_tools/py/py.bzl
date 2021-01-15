@@ -130,7 +130,7 @@ def _add_vpip_compiler_args(ctx, cc_toolchain, copts, conly, args):
 
     # Add anything that isn't a library from the linker flags.
     args.add_all(
-        [flag for flag in link_flags if not flag.startswith("-l") and flag != "-shared"],
+        [flag for flag in link_flags if not flag.startswith("-l")],
         format_each = "--extra-ldflag=%s",
     )
 
