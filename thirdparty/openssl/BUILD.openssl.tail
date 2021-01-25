@@ -38,6 +38,8 @@ OPENSSL_COPTS = [
     "-I",
     "external/org_openssl/include",
     "-I",
+    "external/org_openssl/crypto",
+    "-I",
     "external/org_openssl/crypto/modes",
     "-I",
     "external/org_openssl/crypto/include",
@@ -62,6 +64,7 @@ OPENSSL_COPTS = [
 cc_library(
     name = "crypto",
     srcs = LIBCRYPTO_SRCS + glob([
+        "crypto/*.h",
         "crypto/**/*.h",
         "include/internal/*.h",
     ]) + [
