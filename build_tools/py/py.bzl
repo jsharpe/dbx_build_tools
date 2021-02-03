@@ -70,7 +70,12 @@ ROOT_PLACEHOLDER = "____root____"
 
 def _add_vpip_compiler_args(ctx, cc_toolchain, copts, conly, args):
     # Set the compiler to the crosstool compilation driver.
-    feature_configuration = cc_common.configure_features(ctx = ctx, cc_toolchain = cc_toolchain, requested_features = ctx.features, unsupported_features = ctx.disabled_features)
+    feature_configuration = cc_common.configure_features(
+        ctx = ctx,
+        cc_toolchain = cc_toolchain,
+        requested_features = ctx.features,
+        unsupported_features = ctx.disabled_features,
+    )
     c_compiler = cc_common.get_tool_for_action(
         feature_configuration = feature_configuration,
         action_name = C_COMPILE_ACTION_NAME if conly else CPP_COMPILE_ACTION_NAME,
@@ -526,7 +531,7 @@ def _build_sdist_tar(ctx):
             required_files.append(inf)
     ctx.actions.write(
         output = manifest_file,
-        content = manifest_struct.to_json(),
+        content = json.encode(manifest_struct),
     )
 
     sdist_args.add("--output", sdist_tar)
