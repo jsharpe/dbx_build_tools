@@ -6,6 +6,8 @@ cc_library(
 cc_library(
     name = "ffi",
     srcs = [
+        "include/ffi.h",
+        "include/ffitarget.h",
         "include/ffi_cfi.h",
         "include/ffi_common.h",
         "include/fficonfig.h",
