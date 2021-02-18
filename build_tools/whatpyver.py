@@ -43,12 +43,14 @@ RULE_TYPES = [
     "dbx_slow_metaserver_test",
     "dbx_metaserver_test",
     "dbx_internal_bootstrap_py_binary",
+    "dbx_py_selenium_test",
     # Atlas targets
     "dbx_atlas_http_test",
     "dbx_atlas_metaserver_http_test",
     "dbx_slow_atlas_metaserver_http_test",
     "dbx_atlas_slow_and_expensive_testutil_library",
     "dbx_atlas_servicers_py_library",
+    "dbx_atlas_atf_py_library",
     # Tensorflow targets
     "dbx_py_tf_binary",
     "dbx_py_tf_pytest_test",
@@ -56,9 +58,10 @@ RULE_TYPES = [
 
 RULE_TYPES_THAT_DEFAULT_PY3_ONLY = [
     "dbx_py_binary",
+    "dbx_py_library",
     "dbx_py_test",
-    "py_library",
     "py_binary",
+    "py_library",
 ]
 
 
@@ -197,7 +200,13 @@ class PythonVersionCache(object):
                 t1 = time.time()
                 print("Parsing took %.1f msec" % ((t1 - t0) * 1000))
         self._build_file_parsers[build_file] = bp
-        for rule in bp.get_rules_by_types(RULE_TYPES):
+        rules = bp.get_rules_by_types(RULE_TYPES)
+        if not any(rule.attr_map.get("srcs") for rule in rules):
+            # If the BUILD file is empty or lacks srcs, it trivially supports py2/py3
+            # this helps support intermediate directories w/ only __init__
+            self._py2_files.add(os.path.join(dir, "__init__.py"))
+            self._py3_files.add(os.path.join(dir, "__init__.py"))
+        for rule in rules:
             # NOTE: These defaults may change when build_tools/py/py.bzl changes.
             # python2_compatible is used by dbx_py_binary
             # python_version is used by py_binary
