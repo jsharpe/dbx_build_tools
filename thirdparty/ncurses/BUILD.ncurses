@@ -259,7 +259,7 @@ cc_library(
         "include/unctrl.h",
     ],
     copts = NCURSES_COPTS,
-    strip_include_prefix = "include",
+    includes = ["include"],
     visibility = ["//visibility:public"],
     deps = [
         ":textual-includes",
@@ -280,7 +280,7 @@ cc_library(
     ],
     hdrs = ["panel/panel.h"],
     copts = NCURSES_COPTS,
-    strip_include_prefix = "panel",
+    includes = ["panel"],
     visibility = ["//visibility:public"],
     deps = [
         ":ncursesw",

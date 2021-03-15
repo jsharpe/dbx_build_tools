@@ -31,12 +31,11 @@ cc_library(
     ],
     copts = [
         "-DHAVE_CONFIG_H",
-        "-I$(GENDIR)/external/org_sourceware_libffi/include",
         "-Iexternal/org_sourceware_libffi/include",
         # Upstream likes to put -ffast-math in CFLAGS, but we censor
         # that for safety.
     ],
-    strip_include_prefix = "include",
+    includes = ["include"],
     visibility = ["//visibility:public"],
     deps = [
         ":textual-includes",

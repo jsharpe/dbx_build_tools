@@ -1659,7 +1659,7 @@ cc_library(
     linkopts = [
         "-pthread",
     ],
-    strip_include_prefix = "include",
+    includes = ["include"],
     visibility = ["//visibility:public"],
     deps = [":crypto-textual-hdrs"],
 )
