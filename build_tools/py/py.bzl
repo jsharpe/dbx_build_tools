@@ -577,11 +577,11 @@ Can only be set to False when linking dynamic libraries is allowed (_py_link_dyn
         doc = """Use a new, PEP 517-defined installation style instead of the legacy, setup.py-based
 one. Note, it does not support 'global_options' and 'build_options' arguments.""",
     ),
-    "_vpip_tool": attr.label(executable = True, default = Label("//build_tools/py:vpip"), cfg = "host"),
+    "_vpip_tool": attr.label(executable = True, default = Label("//build_tools/py:vpip"), cfg = "exec"),
     "use_magic_mirror": attr.bool(default = True),
     "_debug_prefix_map_supported": attr.label(default = Label("//build_tools:py_debug_prefix_map_supported")),
     "_py_link_dynamic_libs": attr.label(default = Label("//build_tools:py_link_dynamic_libs")),
-    "_vinst": attr.label(default = Label("//build_tools/py:vinst"), cfg = "host", executable = True),
+    "_vinst": attr.label(default = Label("//build_tools/py:vinst"), cfg = "exec", executable = True),
     "_cc_toolchain": attr.label(default = Label("@bazel_tools//tools/cpp:current_cc_toolchain")),
     "_ducible": attr.label(default = Label("@ducible//:ducible.exe"), allow_single_file = True),
     "_linux_platform": attr.label(default = Label("@platforms//os:linux")),
@@ -594,7 +594,7 @@ _pypi_piplib_attrs.update({
     "pip_version": attr.string(mandatory = True),
     "namespace_pkgs": attr.string_list(),
     "setup_requires": attr.label_list(providers = ["piplib_contents", DbxPyVersionCompatibility]),
-    "tools": attr.label_list(cfg = "host"),
+    "tools": attr.label_list(cfg = "exec"),
 })
 
 dbx_py_pypi_piplib_internal = rule(
@@ -610,8 +610,8 @@ _local_piplib_attrs.update({
     "namespace_pkgs": attr.string_list(),
     "pip_version": attr.string(),
     "setup_requires": attr.label_list(providers = ["piplib_contents", DbxPyVersionCompatibility]),
-    "tools": attr.label_list(cfg = "host"),
-    "_tar_tool": attr.label(default = Label("@rules_pkg//:build_tar"), cfg = "host", executable = True),
+    "tools": attr.label_list(cfg = "exec"),
+    "_tar_tool": attr.label(default = Label("@rules_pkg//:build_tar"), cfg = "exec", executable = True),
 })
 
 dbx_py_local_piplib_internal = rule(
@@ -728,7 +728,7 @@ _dbx_py_binary_base_attrs.update(runfiles_attrs)
 _dbx_py_binary_base_attrs.update({
     "_blank_py_binary": attr.label(
         default = Label("//build_tools/py:blank_py_binary"),
-        cfg = "host",
+        cfg = "exec",
     ),
 })
 

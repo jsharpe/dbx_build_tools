@@ -139,7 +139,7 @@ _cython_module = rule(
         ),
         "_cython_binary": attr.label(
             default = Label("@cython//:cython_binary"),
-            cfg = "host",
+            cfg = "exec",
             executable = True,
         ),
     },

@@ -103,7 +103,7 @@ dbx_py_toolchain = rule(
     _dbx_py_toolchain_impl,
     attrs = {
         "interpreter": attr.label(mandatory = True),
-        "pyc_compile": attr.label(mandatory = True, executable = True, cfg = "host"),
+        "pyc_compile": attr.label(mandatory = True, executable = True, cfg = "exec"),
         "pyc_compilation_enabled": attr.bool(default = True),
         "dbx_importer": attr.label(),
     },

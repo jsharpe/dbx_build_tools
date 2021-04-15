@@ -64,14 +64,14 @@ def _go_toolchain_impl(ctx):
 go_toolchain = rule(
     _go_toolchain_impl,
     attrs = {
-        "asm": attr.label(allow_single_file = True, executable = True, mandatory = True, cfg = "host"),
+        "asm": attr.label(allow_single_file = True, executable = True, mandatory = True, cfg = "exec"),
         "asm_inputs": attr.label(mandatory = True),
-        "cgo": attr.label(allow_single_file = True, executable = True, mandatory = True, cfg = "host"),
-        "compile": attr.label(allow_single_file = True, executable = True, mandatory = True, cfg = "host"),
-        "cover": attr.label(allow_single_file = True, executable = True, mandatory = True, cfg = "host"),
+        "cgo": attr.label(allow_single_file = True, executable = True, mandatory = True, cfg = "exec"),
+        "compile": attr.label(allow_single_file = True, executable = True, mandatory = True, cfg = "exec"),
+        "cover": attr.label(allow_single_file = True, executable = True, mandatory = True, cfg = "exec"),
         "include_dir": attr.string(mandatory = True),
-        "link": attr.label(allow_single_file = True, executable = True, mandatory = True, cfg = "host"),
-        "pack": attr.label(allow_single_file = True, executable = True, mandatory = True, cfg = "host"),
+        "link": attr.label(allow_single_file = True, executable = True, mandatory = True, cfg = "exec"),
+        "pack": attr.label(allow_single_file = True, executable = True, mandatory = True, cfg = "exec"),
         "stdlib": attr.label(mandatory = True),
         "stdlib_race": attr.label(mandatory = True),
         "taglist": attr.string_list(mandatory = True),
@@ -175,11 +175,11 @@ base_attrs = {
     "_go_toolchains": attr.label_list(default = SUPPORTED_GO_TOOLCHAINS),
     "_go_race": attr.label(
         default = Label("//build_tools/go:go_race"),
-        cfg = "host",
+        cfg = "exec",
     ),
     "_go_cover": attr.label(
         default = Label("//build_tools/go:go_cover"),
-        cfg = "host",
+        cfg = "exec",
     ),
     "_cc_toolchain": attr.label(default = Label("@bazel_tools//tools/cpp:current_cc_toolchain")),
 }
@@ -333,7 +333,7 @@ _generate_test_attrs = {
     "_test_generator": attr.label(
         default = Label("//build_tools/go:generate_test_main"),
         executable = True,
-        cfg = "host",
+        cfg = "exec",
     ),
     "go_version": attr.string(),
     "test_main": attr.output(),

@@ -394,7 +394,7 @@ _dbx_mypy_common_attrs = {
         default = Label("//dropbox/mypy:mypy"),
         allow_files = True,
         executable = True,
-        cfg = "host",
+        cfg = "exec",
     ),
     "_mypy_ini": attr.label(
         default = Label("//:mypy.ini"),
@@ -510,7 +510,7 @@ _dbx_mypy_test_attrs = {
         default = Label("//dropbox/mypy:mypy_test"),
         allow_files = True,
         executable = True,
-        cfg = "host",
+        cfg = "exec",
     ),
 }
 _dbx_mypy_test_attrs.update(runfiles_attrs)

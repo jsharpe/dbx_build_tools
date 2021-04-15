@@ -18,15 +18,15 @@ ALL_TOOLCHAIN_NAMES = [BUILD_TAG_TO_TOOLCHAIN_MAP[abi.build_tag] for abi in ALL_
 
 # The minimum attributes needed to be able to emit py binaries (see emit_py_binary below).
 py_binary_attrs = {
-    "_check_conflicts": attr.label(default = Label("//build_tools/py:check_conflicts"), executable = True, cfg = "host"),
+    "_check_conflicts": attr.label(default = Label("//build_tools/py:check_conflicts"), executable = True, cfg = "exec"),
     "_sanitizer_extra_runfiles": attr.label(default = Label("//build_tools/py:sanitizer-extra-runfiles")),
     "_sanitizer": attr.label(
         default = Label("//build_tools:sanitizer"),
-        cfg = "host",
+        cfg = "exec",
     ),
     "_blank_py_binary": attr.label(
         default = Label("//build_tools/py:blank_py_binary"),
-        cfg = "host",
+        cfg = "exec",
     ),
     "_py_link_dynamic_libs": attr.label(default = Label("//build_tools:py_link_dynamic_libs")),
 }
