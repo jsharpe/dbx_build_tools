@@ -14,7 +14,7 @@ DbxPyVersionCompatibility = provider(fields = [
     "python3_compatible",
 ])
 
-ALL_TOOLCHAIN_NAMES = [BUILD_TAG_TO_TOOLCHAIN_MAP[abi.build_tag] for abi in ALL_ABIS]
+ALL_TOOLCHAIN_NAMES = [BUILD_TAG_TO_TOOLCHAIN_MAP[abi.build_tag] for abi in ALL_ABIS] + ['@bazel_tools//tools/cpp:toolchain_type']
 
 # The minimum attributes needed to be able to emit py binaries (see emit_py_binary below).
 py_binary_attrs = {
