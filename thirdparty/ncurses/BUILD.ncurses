@@ -288,11 +288,10 @@ cc_library(
 )
 
 genrule(
-    name = "symlink-ncurses",
+    name = "copy-ncurses",
     srcs = [":include/curses.h"],
     outs = ["include/ncurses.h"],
-    cmd = "ln -s curses.h $@",
-    local = True,  # emits a symlink
+    cmd = "cp -p $(execpath :include/curses.h) $@",
 )
 
 ### BEGIN GENERATED RULES
