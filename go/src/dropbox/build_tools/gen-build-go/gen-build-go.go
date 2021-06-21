@@ -103,6 +103,9 @@ var linkerMp = map[string]struct {
 	"rust_ffi_namespace_view_lib": {
 		Deps: []string{"//rust/dropbox/namespace_view_ffi:namespace_view_ffi_lib"},
 	},
+	"rust_ffi_osd2_disk_tracker": {
+		Deps: []string{"//rust/mp/osd2/osd2_ffi:osd2_ffi_cc_lib"},
+	},
 	"snappy": {
 		Deps: []string{"@snappy//:snappy"},
 	},
@@ -199,7 +202,7 @@ type ConfigGenerator struct {
 }
 
 func init() {
-	build.Default.ReleaseTags = []string{"go1.1", "go1.2", "go1.3", "go1.4", "go1.5", "go1.6", "go1.7", "go1.8", "go1.9", "go1.10", "go1.11", "go1.12"}
+	build.Default.ReleaseTags = []string{"go1.1", "go1.2", "go1.3", "go1.4", "go1.5", "go1.6", "go1.7", "go1.8", "go1.9", "go1.10", "go1.11", "go1.12", "go1.13", "go1.14", "go1.15", "go1.16"}
 }
 
 func (g *ConfigGenerator) isBuiltinPkg(pkgName string) bool {

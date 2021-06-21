@@ -11,28 +11,31 @@ DEFAULT_EXTERNAL_URLS = {
     "com_github_plougher_squashfs_tools": ["https://github.com/plougher/squashfs-tools/archive/4.4.tar.gz"],
     "cpython_27": ["https://www.python.org/ftp/python/2.7.17/Python-2.7.17.tar.xz"],
     "cpython_38": ["https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tar.xz"],
-    "go_1_12_17_linux_amd64_tar_gz": ["https://dl.google.com/go/go1.12.17.linux-amd64.tar.gz"],
+    "go_1_16_5_linux_amd64_tar_gz": ["https://dl.google.com/go/go1.16.5.linux-amd64.tar.gz"],
     "io_pypa_pip_whl": ["https://files.pythonhosted.org/packages/54/0c/d01aa759fdc501a58f431eb594a17495f15b88da142ce14b5845662c13f3/pip-20.0.2-py2.py3-none-any.whl"],
     "io_pypa_setuptools_whl": ["https://files.pythonhosted.org/packages/f9/d3/955738b20d3832dfa3cd3d9b07e29a8162edb480bf988332f5e6e48ca444/setuptools-44.0.0-py2.py3-none-any.whl"],
     "io_pypa_wheel_whl": ["https://files.pythonhosted.org/packages/8c/23/848298cccf8e40f5bbb59009b32848a4c38f4e7f3364297ab3c3e2e2cd14/wheel-0.34.2-py2.py3-none-any.whl"],
+    "lz4": ["https://github.com/lz4/lz4/archive/v1.9.3.tar.gz"],
     "net_zlib": ["http://zlib.net/zlib-1.2.11.tar.gz"],
     "org_bzip_bzip2": ["https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz"],
     "org_gnu_ncurses": ["https://invisible-mirror.net/archives/ncurses/ncurses-6.2.tar.gz"],
     "org_gnu_readline": ["https://ftp.gnu.org/gnu/readline/readline-8.1.tar.gz"],
-    "org_openssl": ["https://www.openssl.org/source/openssl-1.1.1j.tar.gz"],
+    "org_openssl": ["https://www.openssl.org/source/openssl-1.1.1k.tar.gz"],
     "org_sourceware_libffi": ["https://github.com/libffi/libffi/releases/download/v3.3/libffi-3.3.tar.gz"],
-    "org_sqlite": ["https://sqlite.org/2021/sqlite-amalgamation-3340100.zip"],
+    "org_sqlite": ["https://sqlite.org/2021/sqlite-amalgamation-3360000.zip"],
     "org_tukaani": ["https://downloads.sourceforge.net/project/lzmautils/xz-5.2.5.tar.xz"],
     "rules_pkg": ["https://github.com/bazelbuild/rules_pkg/releases/download/0.2.6-1/rules_pkg-0.2.6.tar.gz"],
     "six_archive": ["https://pypi.python.org/packages/b3/b2/238e2590826bfdd113244a40d9d3eb26918bd798fc187e2360a8367068db/six-1.10.0.tar.gz"],
     "ducible": ["https://github.com/jasonwhite/ducible/releases/download/v1.2.2/ducible-windows-Win32-Release.zip"],
+    "zstd": ["https://github.com/facebook/zstd/releases/download/v1.4.9/zstd-1.4.9.tar.gz"],
 }
 
 def drte_deps(urls = DEFAULT_EXTERNAL_URLS):
+
     http_archive(
-        name = "go_1_12_17_linux_amd64_tar_gz",
-        urls = urls["go_1_12_17_linux_amd64_tar_gz"],
-        sha256 = "a53dd476129d496047487bfd53d021dd17e0c96895865a0e7d0469ce3db8c8d2",
+        name = "go_1_16_5_linux_amd64_tar_gz",
+        urls = urls["go_1_16_5_linux_amd64_tar_gz"],
+        sha256 = "b12c23023b68de22f74c0524f10b753e7b08b1504cb7e417eccebdd3fae49061",
         build_file = filename_from_label("//build_tools/go:BUILD.go-dist"),
     )
 
@@ -143,17 +146,33 @@ def cpython_deps(urls = DEFAULT_EXTERNAL_URLS):
     http_archive(
         name = "org_openssl",
         urls = urls["org_openssl"],
-        sha256 = "aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf",
-        strip_prefix = "openssl-1.1.1j",
+        sha256 = "892a0875b9872acd04a9fde79b1f943075d5ea162415de3047c327df33fbaee5",
+        strip_prefix = "openssl-1.1.1k",
         build_file = filename_from_label("//thirdparty/openssl:BUILD.openssl"),
     )
 
     http_archive(
         name = "org_sqlite",
         urls = urls["org_sqlite"],
-        sha256 = "e0b1c0345fe4338b936e17da8e1bd88366cd210e576834546977f040c12a8f68",
-        strip_prefix = "sqlite-amalgamation-3340100",
+        sha256 = "999826fe4c871f18919fdb8ed7ec9dd8217180854dd1fe21eea96aed36186729",
+        strip_prefix = "sqlite-amalgamation-3360000",
         build_file = filename_from_label("//thirdparty/sqlite:BUILD.sqlite"),
+    )
+
+    http_archive(
+        name = "lz4",
+        urls = urls["lz4"],
+        sha256 = "030644df4611007ff7dc962d981f390361e6c97a34e5cbc393ddfbe019ffe2c1",
+        strip_prefix = "lz4-1.9.3",
+        build_file = filename_from_label("//thirdparty/lz4:BUILD.lz4"),
+    )
+
+    http_archive(
+        name = "zstd",
+        urls = urls["zstd"],
+        sha256 = "29ac74e19ea28659017361976240c4b5c5c24db3b89338731a6feb97c038d293",
+        strip_prefix = "zstd-1.4.9",
+        build_file = filename_from_label("//thirdparty/zstd:BUILD.zstd"),
     )
 
 def pypi_core_deps(urls = DEFAULT_EXTERNAL_URLS):
