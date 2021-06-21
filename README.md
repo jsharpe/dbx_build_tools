@@ -1,9 +1,9 @@
 # `dbx_build_tools`
 `dbx_build_tools` is a collection of Bazel rules and associated tooling to build and test applications deployed to Linux servers.
 
-The build rules support hermetic Python binaries. This includes the ability use packages from PyPI and link with c libraries built with Bazel’s built-in C/C++ rules. Python binaries include a Python interpreter built with Bazel.  The `BUILD` file generator can automatically generated dependencies for Python libraries and binaries, saving you from the drudgery of updating the deps every time you add or remove an import.
+The build rules support hermetic Python binaries. This includes the ability to use packages from PyPI and link with C libraries built with Bazel’s built-in C/C++ rules. Python binaries include a Python interpreter built with Bazel.  The `BUILD` file generator can automatically generate dependencies for Python libraries and binaries, saving you from the drudgery of updating the deps every time you add or remove an import.
 
-We also have Go rules. Our `BUILD` file generator supports generating rules entirety from Go source files on the filesystem.
+We also have Go rules. Our `BUILD` file generator supports generating rules entirely from Go source files on the filesystem.
 
 We also include the tooling to generate a custom build and runtime environment. This isolates the build environment from system tools to make remote caching and execution more reliable. It also isolates your binaries outputs from the host system, making major OS upgrades much simpler.
 

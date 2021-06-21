@@ -41,6 +41,13 @@ config_setting(
     },
 )
 
+config_setting(
+    name = "disable-service-deps",
+    values = {
+        "define": "dbx_service_deps=disabled",
+    },
+)
+
 # Used internally by Changes to not create a version file. This is so that tests are remote-cachable
 # Do not set this by hand
 config_setting(
@@ -111,6 +118,7 @@ dbx_py_library(
     srcs = [
         "atomic.py",
     ],
+    python2_compatible = True,
     python3_compatible = True,
 )
 
@@ -120,6 +128,7 @@ dbx_py_library(
         "bazel_utils.py",
         "npm_utils.py",
     ],
+    python2_compatible = True,
     python3_compatible = True,
 )
 
@@ -134,6 +143,7 @@ dbx_py_pytest_test(
 dbx_py_library(
     name = "bazelpkg",
     srcs = ["bazelpkg.py"],
+    python2_compatible = True,
     python3_compatible = True,
 )
 
@@ -247,6 +257,7 @@ dbx_py_library(
     srcs = ["whatpyver.py"],
     # This must not have further dependencies.
     autogen_deps = False,
+    python2_compatible = True,
     deps = [":build_parser_lib"],
 )
 

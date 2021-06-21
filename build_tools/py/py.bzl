@@ -70,7 +70,12 @@ ROOT_PLACEHOLDER = "____root____"
 
 def _add_vpip_compiler_args(ctx, cc_toolchain, copts, conly, args):
     # Set the compiler to the crosstool compilation driver.
-    feature_configuration = cc_common.configure_features(ctx = ctx, cc_toolchain = cc_toolchain)
+    feature_configuration = cc_common.configure_features(
+        ctx = ctx,
+        cc_toolchain = cc_toolchain,
+        requested_features = ctx.features,
+        unsupported_features = ctx.disabled_features,
+    )
     c_compiler = cc_common.get_tool_for_action(
         feature_configuration = feature_configuration,
         action_name = C_COMPILE_ACTION_NAME if conly else CPP_COMPILE_ACTION_NAME,
@@ -271,7 +276,7 @@ def _build_wheel(ctx, wheel, python_interp, sdist_tar):
     for build_dep in ctx.attr.setup_requires:
         versions = build_dep[DbxPyVersionCompatibility]
         if ctx.attr.python2_compatible and not versions.python2_compatible:
-            fail("%s is not compatible with Python 2." % (build_dep.label,))
+            fail("%s is not compatible with Python 2; perhaps this indicates that this target need not be python 2 compatible." % (build_dep.label,))
         if ctx.attr.python3_compatible and not versions.python3_compatible:
             fail("%s is not compatible with Python 3." % (build_dep.label,))
         build_dep_wheels.extend(
@@ -524,7 +529,7 @@ def _build_sdist_tar(ctx):
             required_files.append(inf)
     ctx.actions.write(
         output = manifest_file,
-        content = manifest_struct.to_json(),
+        content = json.encode(manifest_struct),
     )
 
     sdist_args.add("--output", sdist_tar)
@@ -814,6 +819,7 @@ def dbx_py_pypi_piplib(
         import_test_tags = None,
         python2_compatible = True,
         python3_compatible = True,
+        quarantine = {},
         **kwargs):
     if provides == None:
         # If no explicit 'provides' attribute is specified, default to using the target name itself.
@@ -839,6 +845,7 @@ def dbx_py_pypi_piplib(
         python2_compatible = python2_compatible,
         python3_compatible = python3_compatible,
         tags = import_test_tags,
+        quarantine = quarantine,
     )
 
 def dbx_py_local_piplib(
@@ -848,6 +855,7 @@ def dbx_py_local_piplib(
         import_test_tags = None,
         python2_compatible = True,
         python3_compatible = True,
+        quarantine = {},
         **kwargs):
     if provides == None:
         # If no explicit 'provides' attribute is specified, default to using the target name itself.
@@ -873,6 +881,7 @@ def dbx_py_local_piplib(
         python2_compatible = python2_compatible,
         python3_compatible = python3_compatible,
         tags = import_test_tags,
+        quarantine = quarantine,
     )
 
 def dbx_py_piplib_alias(name, provides = None, **kwargs):
@@ -885,7 +894,7 @@ dbx_py_library_attrs = {
     "srcs": attr.label_list(allow_files = py_file_types),
     "stub_srcs": attr.label_list(allow_files = pyi_file_types),  # For mypy
     "pythonpath": attr.string(),
-    "python2_compatible": attr.bool(default = True),
+    "python2_compatible": attr.bool(default = False),
     "python3_compatible": attr.bool(default = True),
     "validate": attr.string(default = "strict", mandatory = False, values = ["strict", "warn", "ignore", "allow-unused"]),
     # This is available for a few odd cases like tensorflow and opencv which use

@@ -43,12 +43,15 @@ RULE_TYPES = [
     "dbx_slow_metaserver_test",
     "dbx_metaserver_test",
     "dbx_internal_bootstrap_py_binary",
+    "dbx_py_selenium_test",
     # Atlas targets
     "dbx_atlas_http_test",
+    "dbx_atlas_blockserver_http_test",
     "dbx_atlas_metaserver_http_test",
     "dbx_slow_atlas_metaserver_http_test",
     "dbx_atlas_slow_and_expensive_testutil_library",
     "dbx_atlas_servicers_py_library",
+    "dbx_atlas_atf_py_library",
     # Tensorflow targets
     "dbx_py_tf_binary",
     "dbx_py_tf_pytest_test",
@@ -56,9 +59,14 @@ RULE_TYPES = [
 
 RULE_TYPES_THAT_DEFAULT_PY3_ONLY = [
     "dbx_py_binary",
+    "dbx_py_library",
+    "dbx_atlas_blockserver_http_test",
+    "dbx_atlas_servicers_py_library",
+    "dbx_atlas_slow_and_expensive_testutil_library",
+    "dbx_atlas_atf_py_library",
     "dbx_py_test",
-    "py_library",
     "py_binary",
+    "py_library",
 ]
 
 
@@ -197,7 +205,13 @@ class PythonVersionCache(object):
                 t1 = time.time()
                 print("Parsing took %.1f msec" % ((t1 - t0) * 1000))
         self._build_file_parsers[build_file] = bp
-        for rule in bp.get_rules_by_types(RULE_TYPES):
+        rules = bp.get_rules_by_types(RULE_TYPES)
+        if not any(rule.attr_map.get("srcs") for rule in rules):
+            # If the BUILD file is empty or lacks srcs, it trivially supports py2/py3
+            # this helps support intermediate directories w/ only __init__
+            self._py2_files.add(os.path.join(dir, "__init__.py"))
+            self._py3_files.add(os.path.join(dir, "__init__.py"))
+        for rule in rules:
             # NOTE: These defaults may change when build_tools/py/py.bzl changes.
             # python2_compatible is used by dbx_py_binary
             # python_version is used by py_binary
@@ -208,7 +222,8 @@ class PythonVersionCache(object):
                     rule.rule_type not in RULE_TYPES_THAT_DEFAULT_PY3_ONLY,
                 )
                 or rule.attr_map.get("python_version", "PY3") == "PY2"
-                or rule.attr_map.get("srcs_version", "PY3") in ("PY2", "PY2ONLY", "PY2AND3")
+                or rule.attr_map.get("srcs_version", "PY3")
+                in ("PY2", "PY2ONLY", "PY2AND3")
             )
 
             py3 = (
@@ -220,10 +235,15 @@ class PythonVersionCache(object):
                 rule.attr_map.get("srcs", [])
             ):
                 src = os.path.join(dir, src)
+                # Explicitly add __init__.py files, since those are typically not included
+                # in BUILD files, but mypy relies on them for module existence, particularly
+                # when follow_imports=skip in the mypy.ini
                 if py2:
                     self._py2_files.add(src)
+                    self._py2_files.add(os.path.join(dir, "__init__.py"))
                 if py3:
                     self._py3_files.add(src)
+                    self._py3_files.add(os.path.join(dir, "__init__.py"))
 
     def get_flags(self, file):
         # type: (str) -> Tuple[bool, bool]

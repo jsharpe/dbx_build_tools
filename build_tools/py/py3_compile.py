@@ -7,6 +7,12 @@ import os
 import sys
 
 DOCSTRING_STRIP_EXCEPTIONS = [
+    "capirca",
+    "seaborn",
+    "statsmodel",
+    "stone",
+    "tensorflow",
+    "transformers",
 ]
 
 
